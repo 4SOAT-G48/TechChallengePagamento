@@ -1,0 +1,25 @@
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+
+# Maven
+target/
+.mvn
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Docker
+docker-compose.override.yml
