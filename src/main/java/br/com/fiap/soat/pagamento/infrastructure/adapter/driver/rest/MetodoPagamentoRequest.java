@@ -10,7 +10,6 @@ public class MetodoPagamentoRequest {
     private TipoPagamento tipoPagamento;
     private String urlImagem;
 
-    // Construtores, Getters e Setters
     public UUID getCodigo() {
         return codigo;
     }

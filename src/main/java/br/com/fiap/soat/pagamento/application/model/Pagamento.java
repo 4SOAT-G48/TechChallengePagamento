@@ -19,7 +19,6 @@ public class Pagamento {
     private SituacaoPagamento situacaoPagamento;
     private MetodoPagamento metodoPagamento;
 
-    // Construtor com argumentos
     public Pagamento(String id, UUID codigo, String clienteId, String pedidoId, double valor, SituacaoPagamento situacaoPagamento, MetodoPagamento metodoPagamento) {
         this.id = id;
         this.codigo = codigo;

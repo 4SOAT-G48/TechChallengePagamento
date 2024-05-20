@@ -4,8 +4,6 @@ import java.util.UUID;
 
 public class MetodoPagamentoConsultaRequest {
     private UUID codigo;
-
-    // Construtores, Getters e Setters
     public UUID getCodigo() {
         return codigo;
     }

@@ -11,7 +11,6 @@ public class MetodoPagamento {
     private TipoPagamento tipoPagamento;
     private String urlImagem;
 
-    // Construtor adicional
     public MetodoPagamento(UUID codigo, String nome, TipoPagamento tipoPagamento, String urlImagem) {
         this.codigo = codigo;
         this.nome = nome;

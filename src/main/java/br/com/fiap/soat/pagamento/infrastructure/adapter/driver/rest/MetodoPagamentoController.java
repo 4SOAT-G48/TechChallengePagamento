@@ -31,7 +31,6 @@ public class MetodoPagamentoController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<MetodoPagamentoResponse> consultarMetodoPagamento(@PathVariable String id) {
-        // Implementar a lógica de consulta
         return ResponseEntity.ok(new MetodoPagamentoResponse());
     }
 }

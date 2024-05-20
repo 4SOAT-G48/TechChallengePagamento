@@ -12,7 +12,6 @@ public class PagamentoRequest {
     private String situacaoPagamento;
     private MetodoPagamento metodoPagamento;
 
-    // Getters e Setters
     public String getClienteId() {
         return clienteId;
     }

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 public class RabbitMQMessageHandler {
 
     public void receiveMessage(String message) {
-        // Lógica para processar a mensagem recebida
         System.out.println("Mensagem recebida: " + message);
     }
 }
