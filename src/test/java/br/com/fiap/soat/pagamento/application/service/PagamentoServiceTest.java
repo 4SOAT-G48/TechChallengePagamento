@@ -1,10 +1,10 @@
 package br.com.fiap.soat.pagamento.application.service;
 
-import br.com.fiap.soat.pagamento.application.model.Pagamento;
-import br.com.fiap.soat.pagamento.application.model.SituacaoPagamento;
-import br.com.fiap.soat.pagamento.application.model.MetodoPagamento;
-import br.com.fiap.soat.pagamento.application.model.TipoPagamento;
-import br.com.fiap.soat.pagamento.infrastructure.adapter.driven.persistence.repository.PagamentoMongoRepository;
+import br.com.fiap.soat.pagamento.application.domain.model.Pagamento;
+import br.com.fiap.soat.pagamento.application.domain.model.SituacaoPagamento;
+import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
+import br.com.fiap.soat.pagamento.application.domain.model.TipoPagamento;
+import br.com.fiap.soat.pagamento.infrastructure.adapter.db.PagamentoMongoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
