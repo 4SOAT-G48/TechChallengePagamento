@@ -15,5 +15,4 @@ public class MetodoPagamentoResponse {
     private String nome;
     private TipoPagamento tipoPagamento;
     private String urlImagem;
-
 }

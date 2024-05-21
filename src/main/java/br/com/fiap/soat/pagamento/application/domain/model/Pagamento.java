@@ -2,10 +2,15 @@ package br.com.fiap.soat.pagamento.application.domain.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 @Document(collection = "pagamentos")
 public class Pagamento {
 
@@ -28,6 +33,7 @@ public class Pagamento {
         this.situacaoPagamento = situacaoPagamento;
         this.metodoPagamento = metodoPagamento;
     }
+
 
     // Getters e Setters
     public String getId() {

@@ -1,4 +1,4 @@
-package br.com.fiap.soat.pagamento.entity;
+package br.com.fiap.soat.pagamento.infrastructure.adapter.db;
 
 
 import br.com.fiap.soat.pagamento.application.domain.model.Pagamento;

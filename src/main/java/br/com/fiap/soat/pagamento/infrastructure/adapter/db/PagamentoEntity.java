@@ -2,12 +2,19 @@ package br.com.fiap.soat.pagamento.infrastructure.adapter.db;
 
 import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.SituacaoPagamento;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "pagamentos")
 public class PagamentoEntity {
 

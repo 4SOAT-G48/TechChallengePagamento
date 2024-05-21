@@ -32,7 +32,7 @@ public class MetodoPagamentoMapper {
         return metodoPagamentos.stream().map(this::toResponse).collect(Collectors.toList());
     }
 
-    private MetodoPagamentoResponse toResponse(MetodoPagamento metodoPagamento) {
+    public MetodoPagamentoResponse toResponse(MetodoPagamento metodoPagamento) {
         return new MetodoPagamentoResponse(metodoPagamento.getCodigo(), metodoPagamento.getNome(), metodoPagamento.getTipoPagamento(), metodoPagamento.getUrlImagem());
     }
 }
