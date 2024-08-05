@@ -2,6 +2,8 @@ server:
   port: ${SERVER_PORT}
 
 spring:
+  application:
+    name: grupo48-pagamento
   config:
     import: optional:file:.env[.properties]
   profiles:
@@ -11,11 +13,17 @@ spring:
       host: ${MONGO_HOST}
       port: ${MONGO_PORT}
       database: ${MONGO_DB}
+      uri: mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PASSWORD}
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  output:
+    ansi:
+      enabled: ALWAYS
 
 logging:
   level:
@@ -26,3 +34,27 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui-custom.html
+
+message:
+  recever:
+    exchange: ${EXCHANGE_PAGAMENTO}
+    cria:
+      route-key: ${ROUTEKEY_PAGAMENTO_CRIA}
+      queues: ${QUEUES_PAGAMENTO_CRIA}
+    envia:
+      route-key: ${ROUTEKEY_PAGAMENTO_ENVIA}
+      queues: ${QUEUES_PAGAMENTO_ENVIA}
+  publish:
+    pagamento:
+      criado:
+        route-key: ${ROUTEKEY_PAGAMENTO_CRIADO}
+        exchange: ${EXCHANGE_PAGAMENTO_CRIADO}
+      aguardando-pagamento:
+        route-key: ${ROUTEKEY_PAGAMENTO_AGUARDANDO_PAGAMENTO}
+        exchange: ${EXCHANGE_PAGAMENTO_AGUARDANDO_PAGAMENTO}
+      aprovado:
+        route-key: ${ROUTEKEY_PAGAMENTO_APROVADO}
+        exchange: ${EXCHANGE_PAGAMENTO_APROVADO}
+      reprovado:
+        route-key: ${ROUTEKEY_PAGAMENTO_REPROVADO}
+        exchange: ${EXCHANGE_PAGAMENTO_REPROVADO}

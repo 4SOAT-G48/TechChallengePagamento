@@ -3,7 +3,7 @@ package br.com.fiap.soat.pagamento.infrastructure.adapter.rest;
 import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
 import br.com.fiap.soat.pagamento.application.service.port.in.IMetodoPagamentoPort;
 import br.com.fiap.soat.pagamento.infrastructure.adapter.db.MetodoPagamentoMapper;
-import br.com.fiap.soat.pagamento.infrastructure.adapter.db.MetodoPagamentoRepository;
+import br.com.fiap.soat.pagamento.infrastructure.adapter.db.MetodoPagamentoMongoRepository;
 import br.com.fiap.soat.pagamento.infrastructure.adapter.db.PagamentoMapper;
 import br.com.fiap.soat.pagamento.infrastructure.adapter.db.PagamentoRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,7 +28,7 @@ public class MetodoPagamentoController {
     private PagamentoRepository pagamentoRepository;
 
     @Autowired
-    private MetodoPagamentoRepository metodoPagamentoRepository;
+    private MetodoPagamentoMongoRepository metodoPagamentoRepository;
 
     @Autowired
     private IMetodoPagamentoPort metodoPagamentoPort;
@@ -53,7 +53,7 @@ public class MetodoPagamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<MetodoPagamentoResponse> consultarMetodoPagamento(@PathVariable String id) {
         return metodoPagamentoRepository.findById(id)
-                .map(metodoPagamento -> ResponseEntity.ok(new MetodoPagamentoResponse(metodoPagamento.getCodigo(),metodoPagamento.getNome(), metodoPagamento.getTipoPagamento(), metodoPagamento.getUrlImagem())))
+                .map(metodoPagamento -> ResponseEntity.ok(new MetodoPagamentoResponse(metodoPagamento.getId(),metodoPagamento.getNome(), metodoPagamento.getTipoPagamento(), metodoPagamento.getUrlImagem())))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 

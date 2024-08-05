@@ -22,7 +22,7 @@ import java.util.UUID;
 public class MetodoPagamentoEntity {
 
     @Id
-    private UUID codigo;
+    private String id;
 
     private String nome;
 
@@ -36,16 +36,8 @@ public class MetodoPagamentoEntity {
     @LastModifiedDate
     private Date dataAtualizacao;
 
-    public UUID getCodigo() { return this.codigo; }
-
-    public String getNome() { return this.nome; }
-
-    public TipoPagamento getTipoPagamento() { return this.tipoPagamento; }
-
-    public String getUrlImagem() { return this.urlImagem; }
-
-    public MetodoPagamentoEntity(UUID codigo, String nome, TipoPagamento tipoPagamento, String urlImagem) {
-        this.codigo = codigo;
+    public MetodoPagamentoEntity(String id, String nome, TipoPagamento tipoPagamento, String urlImagem) {
+        this.id = id;
         this.nome = nome;
         this.tipoPagamento = tipoPagamento;
         this.urlImagem = urlImagem;

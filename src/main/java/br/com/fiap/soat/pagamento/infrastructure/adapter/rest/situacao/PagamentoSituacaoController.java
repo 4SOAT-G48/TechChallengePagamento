@@ -22,10 +22,8 @@ import java.util.UUID;
 @RequestMapping("/api/pagamento-situacao")
 public class PagamentoSituacaoController {
 
-    @Autowired
     private IPagamentoSituacaoPort pagamentoSituacaoPort;
 
-    @Autowired
     private PagamentoSituacaoMapper pagamentoSituacaoMapper;
 
     public PagamentoSituacaoController(IPagamentoSituacaoPort pagamentoSituacaoPort, PagamentoSituacaoMapper pagamentoSituacaoMapper) {

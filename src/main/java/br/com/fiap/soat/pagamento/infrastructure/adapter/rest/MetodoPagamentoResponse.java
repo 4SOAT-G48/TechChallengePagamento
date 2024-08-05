@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MetodoPagamentoResponse {
-    private UUID codigo;
+    private String id;
     private String nome;
     private TipoPagamento tipoPagamento;
     private String urlImagem;

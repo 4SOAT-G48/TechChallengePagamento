@@ -1,44 +1,17 @@
 package br.com.fiap.soat.pagamento.infrastructure.adapter.rest;
 
 import br.com.fiap.soat.pagamento.application.domain.model.TipoPagamento;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
+@Setter
 public class MetodoPagamentoRequest {
-    private UUID codigo;
+    private String id;
     private String nome;
     private TipoPagamento tipoPagamento;
     private String urlImagem;
 
-    public UUID getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(UUID codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public TipoPagamento getTipoPagamento() {
-        return tipoPagamento;
-    }
-
-    public void setTipoPagamento(TipoPagamento tipoPagamento) {
-        this.tipoPagamento = tipoPagamento;
-    }
-
-    public String getUrlImagem() {
-        return urlImagem;
-    }
-
-    public void setUrlImagem(String urlImagem) {
-        this.urlImagem = urlImagem;
-    }
 }

@@ -1,5 +1,6 @@
 package br.com.fiap.soat.pagamento.application.domain.model;
 
+import br.com.fiap.soat.pagamento.commons.domain.model.JsonMapper;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.*;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Document(collection = "pagamentos")
-public class Pagamento {
+public class Pagamento extends JsonMapper {
 
     @Id
     private String id;

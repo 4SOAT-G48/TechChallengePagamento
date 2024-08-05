@@ -16,7 +16,7 @@ public class PagamentoDTOMapper {
     }
 
     public MetodoPagamento toMetodoPagamento(MetodoPagamentoRequest request) {
-        return new MetodoPagamento(request.getCodigo(), request.getNome(), request.getTipoPagamento(), request.getUrlImagem());
+        return new MetodoPagamento(request.getId(), request.getNome(), request.getTipoPagamento(), request.getUrlImagem());
     }
 
     public Pagamento toPagamentoCriacao(PagamentoCriacaoRequest request) {
@@ -28,6 +28,6 @@ public class PagamentoDTOMapper {
         if (Objects.isNull(request)) {
             return null;
         }
-        return new MetodoPagamento(request.getCodigo(), null, null, null);
+        return new MetodoPagamento(request.getId(), null, null, null);
     }
 }

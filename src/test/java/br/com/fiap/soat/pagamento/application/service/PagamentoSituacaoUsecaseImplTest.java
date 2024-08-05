@@ -4,7 +4,7 @@ import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.Pagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.SituacaoPagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.TipoPagamento;
-import br.com.fiap.soat.pagamento.application.service.port.out.IConsultaInformacaoPagamentoIntegrationGateway;
+import br.com.fiap.soat.pagamento.application.service.port.out.IFontePagadoraIntegrationGateway;
 import br.com.fiap.soat.pagamento.application.service.port.out.IPagamentoRepositoryGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class PagamentoSituacaoUsecaseImplTest {
     private IPagamentoRepositoryGateway pagamentoRepositoryGateway;
 
     @Mock
-    private IConsultaInformacaoPagamentoIntegrationGateway consultaInformacaoPagamentoIntegrationGateway;
+    private IFontePagadoraIntegrationGateway consultaInformacaoPagamentoIntegrationGateway;
 
     @Mock
     private RabbitTemplate rabbitTemplate;
@@ -40,7 +40,7 @@ class PagamentoSituacaoUsecaseImplTest {
 
     @Test
     void testAtualizaSituacao_Aprovado() {
-        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
+        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
         Pagamento pagamentoAntes = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.AGUARDANDO_PAGAMENTO, metodoPagamento);
         Pagamento pagamentoAtual = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.APROVADO, metodoPagamento);
 
@@ -57,7 +57,7 @@ class PagamentoSituacaoUsecaseImplTest {
 
     @Test
     void testAtualizaSituacao_Reprovado() {
-        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
+        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
         Pagamento pagamentoAntes = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.AGUARDANDO_PAGAMENTO, metodoPagamento);
         Pagamento pagamentoAtual = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.REPROVADO, metodoPagamento);
 
@@ -75,7 +75,7 @@ class PagamentoSituacaoUsecaseImplTest {
     @Test
     void testBuscarPagamento() {
         UUID codigo = UUID.randomUUID();
-        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
+        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
         Pagamento pagamento = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.AGUARDANDO_PAGAMENTO, metodoPagamento);
 
 
@@ -91,7 +91,7 @@ class PagamentoSituacaoUsecaseImplTest {
     void testBuscarSituacaoFontePagadora() {
         TipoPagamento tipoPagamento = TipoPagamento.MERCADO_PAGO;
         String id = "123";
-        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
+        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
         Pagamento pagamento = new Pagamento(null, UUID.randomUUID(), "abc123", "cba123", 10.0, SituacaoPagamento.AGUARDANDO_PAGAMENTO, metodoPagamento);
 
 

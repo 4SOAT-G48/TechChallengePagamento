@@ -4,16 +4,20 @@ import br.com.fiap.soat.pagamento.application.domain.model.Pagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.SituacaoPagamento;
 import br.com.fiap.soat.pagamento.application.service.port.out.IPagamentoRepositoryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
+@Component
 public class PagamentoRepository implements IPagamentoRepositoryGateway {
 
-    @Autowired
-    private PagamentoMongoRepository pagamentoMongoRepository;
+    private final PagamentoMongoRepository pagamentoMongoRepository;
+
+    public PagamentoRepository(PagamentoMongoRepository pagamentoMongoRepository) {
+        this.pagamentoMongoRepository = pagamentoMongoRepository;
+    }
 
     @Override
     public Pagamento salvar(Pagamento pagamento) {

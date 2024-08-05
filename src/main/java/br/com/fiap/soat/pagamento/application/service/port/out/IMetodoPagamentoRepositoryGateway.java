@@ -11,7 +11,7 @@ public interface IMetodoPagamentoRepositoryGateway {
 
     List<MetodoPagamento> buscarTodos();
 
-    MetodoPagamento buscarPeloCodigo(UUID codigo);
+    MetodoPagamento buscarPeloCodigo(String id);
 
-    MetodoPagamento salvar(UUID codigo, String nome, TipoPagamento tipoPagamento, String urlImagem);
+    MetodoPagamento salvar(String id, String nome, TipoPagamento tipoPagamento, String urlImagem);
 }

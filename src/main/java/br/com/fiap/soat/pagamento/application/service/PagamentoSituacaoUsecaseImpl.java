@@ -3,39 +3,61 @@ package br.com.fiap.soat.pagamento.application.service;
 import br.com.fiap.soat.pagamento.application.domain.model.Pagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.SituacaoPagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.TipoPagamento;
+import br.com.fiap.soat.pagamento.application.exception.PagamentoIllegalArgumentException;
 import br.com.fiap.soat.pagamento.application.service.port.in.IPagamentoSituacaoPort;
-import br.com.fiap.soat.pagamento.application.service.port.out.IConsultaInformacaoPagamentoIntegrationGateway;
+import br.com.fiap.soat.pagamento.application.service.port.out.IFontePagadoraIntegrationGateway;
+import br.com.fiap.soat.pagamento.application.service.port.out.IPagamentoPublishQueueAdapter;
 import br.com.fiap.soat.pagamento.application.service.port.out.IPagamentoRepositoryGateway;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PagamentoSituacaoUsecaseImpl implements IPagamentoSituacaoPort {
 
     private final IPagamentoRepositoryGateway pagamentoRepositoryGateway;
-    private final IConsultaInformacaoPagamentoIntegrationGateway consultaInformacaoPagamentoIntegrationGateway;
-    private final RabbitTemplate rabbitTemplate;
+    private final IFontePagadoraIntegrationGateway fontePagadoraIntegrationGateway;
+    private final IPagamentoPublishQueueAdapter pagamentoPublishQueueAdapter;
 
-    public PagamentoSituacaoUsecaseImpl(IPagamentoRepositoryGateway pagamentoRepositoryGateway, IConsultaInformacaoPagamentoIntegrationGateway consultaInformacaoPagamentoIntegrationGateway, RabbitTemplate rabbitTemplate) {
+    public PagamentoSituacaoUsecaseImpl(IPagamentoRepositoryGateway pagamentoRepositoryGateway, IFontePagadoraIntegrationGateway consultaInformacaoPagamentoIntegrationGateway, IPagamentoPublishQueueAdapter pagamentoPublishQueueAdapter) {
         this.pagamentoRepositoryGateway = pagamentoRepositoryGateway;
-        this.consultaInformacaoPagamentoIntegrationGateway = consultaInformacaoPagamentoIntegrationGateway;
-        this.rabbitTemplate = rabbitTemplate;
+        this.fontePagadoraIntegrationGateway = consultaInformacaoPagamentoIntegrationGateway;
+        this.pagamentoPublishQueueAdapter = pagamentoPublishQueueAdapter;
+    }
+
+
+    @Override
+    public Pagamento criaPagamento(Pagamento pagamento) throws PagamentoIllegalArgumentException {
+        if (Objects.isNull(pagamento.getClienteId())) {
+            throw new PagamentoIllegalArgumentException("Cliente não informado.");
+        }
+        if (Objects.isNull(pagamento.getPedidoId())) {
+            throw new PagamentoIllegalArgumentException("Pedido não informado.");
+        }
+        pagamento.setSituacaoPagamento(SituacaoPagamento.PENDENTE);
+        Pagamento salvar = pagamentoRepositoryGateway.salvar(pagamento);
+        pagamentoPublishQueueAdapter.publishPagamentoCriado(salvar.toJson());
+        return salvar;
     }
 
     @Override
     public boolean atualizaSituacao(Pagamento pagamento) {
         Pagamento pagamentoAntes = this.pagamentoRepositoryGateway.buscarPeloCodigo(pagamento.getCodigo());
         if (pagamentoAntes.getSituacaoPagamento() != SituacaoPagamento.APROVADO
-                || pagamentoAntes.getSituacaoPagamento() != SituacaoPagamento.REPROVADO) {
+            || pagamentoAntes.getSituacaoPagamento() != SituacaoPagamento.REPROVADO) {
 
             Pagamento pagamentoAtual = this.pagamentoRepositoryGateway.atualizaSituacao(pagamentoAntes.getCodigo(), pagamento.getSituacaoPagamento());
 
-            if (pagamentoAntes.getSituacaoPagamento().equals(SituacaoPagamento.AGUARDANDO_PAGAMENTO)
-                    && pagamentoAtual.getSituacaoPagamento().equals(SituacaoPagamento.APROVADO)) {
-                rabbitTemplate.convertAndSend("pedido-queue", "Pagamento aprovado: " + pagamentoAtual.getCodigo());
+            if (pagamentoAntes.getSituacaoPagamento().equals(SituacaoPagamento.PENDENTE)
+                && pagamentoAtual.getSituacaoPagamento().equals(SituacaoPagamento.AGUARDANDO_PAGAMENTO)) {
+                fontePagadoraIntegrationGateway.enviaParaFontePagadora(pagamentoAtual);
+                pagamentoPublishQueueAdapter.publishPagamentoAguardandoPagamento(pagamentoAtual.toJson());
+
             } else if (pagamentoAntes.getSituacaoPagamento().equals(SituacaoPagamento.AGUARDANDO_PAGAMENTO)
-                    && pagamentoAtual.getSituacaoPagamento().equals(SituacaoPagamento.REPROVADO)) {
-                rabbitTemplate.convertAndSend("pedido-queue", "Pagamento reprovado: " + pagamentoAtual.getCodigo());
+                && pagamentoAtual.getSituacaoPagamento().equals(SituacaoPagamento.APROVADO)) {
+                pagamentoPublishQueueAdapter.publishPagamentoAprovado(pagamentoAtual.toJson());
+            } else if (pagamentoAntes.getSituacaoPagamento().equals(SituacaoPagamento.AGUARDANDO_PAGAMENTO)
+                && pagamentoAtual.getSituacaoPagamento().equals(SituacaoPagamento.REPROVADO)) {
+                pagamentoPublishQueueAdapter.publishPagamentoReprovado(pagamentoAtual.toJson());
             }
             return true;
         } else {
@@ -50,7 +72,7 @@ public class PagamentoSituacaoUsecaseImpl implements IPagamentoSituacaoPort {
 
     @Override
     public void buscarSituacaoFontePagadora(TipoPagamento tipoPagamento, String id) {
-        Pagamento pagamento = this.consultaInformacaoPagamentoIntegrationGateway.buscarSituacaoPagamento(tipoPagamento, id);
+        Pagamento pagamento = this.fontePagadoraIntegrationGateway.buscarSituacaoPagamento(tipoPagamento, id);
         this.atualizaSituacao(pagamento);
     }
 }

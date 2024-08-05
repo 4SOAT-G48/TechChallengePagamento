@@ -1,23 +1,24 @@
 package br.com.fiap.soat.pagamento;
 
+import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
 import br.com.fiap.soat.pagamento.application.domain.model.TipoPagamento;
+import br.com.fiap.soat.pagamento.infrastructure.adapter.db.MetodoPagamentoMongoRepository;
 import br.com.fiap.soat.pagamento.infrastructure.adapter.rest.MetodoPagamentoController;
 import br.com.fiap.soat.pagamento.infrastructure.adapter.rest.MetodoPagamentoResponse;
-import br.com.fiap.soat.pagamento.application.domain.model.MetodoPagamento;
-import br.com.fiap.soat.pagamento.infrastructure.adapter.db.MetodoPagamentoRepository;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import static org.junit.jupiter.api.Assertions.*;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class PagamentoStepDefinitions {
@@ -26,13 +27,13 @@ public class PagamentoStepDefinitions {
     private MetodoPagamentoController metodoPagamentoController;
 
     @MockBean
-    private MetodoPagamentoRepository metodoPagamentoRepository;
+    private MetodoPagamentoMongoRepository metodoPagamentoRepository;
 
     private ResponseEntity<MetodoPagamentoResponse> response;
 
     @Given("um método de pagamento com id {string} existe")
     public void um_metodo_de_pagamento_com_id_existe(String id) {
-        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(), null, TipoPagamento.MERCADO_PAGO, null);
+        MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), null, TipoPagamento.MERCADO_PAGO, null);
         metodoPagamento.setNome("Cartão de Crédito");
 
         when(metodoPagamentoRepository.findById(id)).thenReturn(Optional.of(metodoPagamento));

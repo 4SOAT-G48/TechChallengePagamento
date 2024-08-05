@@ -41,8 +41,8 @@ class MetodoPagamentoUsecaseImplTest {
 
     @Test
     void testBuscarMetodosPagamentos() {
-        MetodoPagamento metodo1 = new MetodoPagamento(UUID.randomUUID(), "nome1", TipoPagamento.MERCADO_PAGO, "url1");
-        MetodoPagamento metodo2 = new MetodoPagamento(UUID.randomUUID(), "nome2", TipoPagamento.MERCADO_PAGO, "url2");
+        MetodoPagamento metodo1 = new MetodoPagamento(UUID.randomUUID().toString(), "nome1", TipoPagamento.MERCADO_PAGO, "url1");
+        MetodoPagamento metodo2 = new MetodoPagamento(UUID.randomUUID().toString(), "nome2", TipoPagamento.MERCADO_PAGO, "url2");
         List<MetodoPagamento> metodos = Arrays.asList(metodo1, metodo2);
 
         when(metodoPagamentoRepositoryGateway.buscarTodos()).thenReturn(metodos);
@@ -57,12 +57,12 @@ class MetodoPagamentoUsecaseImplTest {
 
     @Test
     void testSalvar() {
-        MetodoPagamento metodo = new MetodoPagamento(UUID.randomUUID(), "nome", TipoPagamento.MERCADO_PAGO, "url");
-        when(metodoPagamentoRepositoryGateway.salvar(UUID.randomUUID(), "nome", TipoPagamento.MERCADO_PAGO, "url")).thenReturn(metodo);
+        MetodoPagamento metodo = new MetodoPagamento(UUID.randomUUID().toString(), "nome", TipoPagamento.MERCADO_PAGO, "url");
+        when(metodoPagamentoRepositoryGateway.salvar(UUID.randomUUID().toString(), "nome", TipoPagamento.MERCADO_PAGO, "url")).thenReturn(metodo);
 
         MetodoPagamento result = metodoPagamentoUsecase.salvar(metodo);
 
         assertEquals(metodo, result);
-        verify(metodoPagamentoRepositoryGateway, times(1)).salvar(UUID.randomUUID(), "nome", TipoPagamento.MERCADO_PAGO, "url");
+        verify(metodoPagamentoRepositoryGateway, times(1)).salvar(UUID.randomUUID().toString(), "nome", TipoPagamento.MERCADO_PAGO, "url");
     }
 }

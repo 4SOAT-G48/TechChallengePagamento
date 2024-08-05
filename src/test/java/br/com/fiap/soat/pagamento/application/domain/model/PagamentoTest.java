@@ -121,7 +121,7 @@ class PagamentoTest {
             // Arrange
             Pagamento pagamento = PagamentoHelper.gerarPagamento();
 
-            MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID(),"PIX", TipoPagamento.MERCADO_PAGO, "url");
+            MetodoPagamento metodoPagamento = new MetodoPagamento(UUID.randomUUID().toString(), "PIX", TipoPagamento.MERCADO_PAGO, "url");
 
             // Act
             pagamento.setMetodoPagamento(metodoPagamento);

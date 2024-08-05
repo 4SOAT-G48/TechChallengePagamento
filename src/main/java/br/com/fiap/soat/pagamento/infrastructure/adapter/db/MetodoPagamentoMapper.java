@@ -12,7 +12,7 @@ public class MetodoPagamentoMapper {
 
     public MetodoPagamento toMetodoPagamento(MetodoPagamentoEntity metodoPagamentoEntity) {
         return new MetodoPagamento(
-                metodoPagamentoEntity.getCodigo(),
+                metodoPagamentoEntity.getId(),
                 metodoPagamentoEntity.getNome(),
                 metodoPagamentoEntity.getTipoPagamento(),
                 metodoPagamentoEntity.getUrlImagem()
@@ -21,7 +21,7 @@ public class MetodoPagamentoMapper {
 
     public MetodoPagamentoEntity toMetodoPagamentoEntity(MetodoPagamento metodoPagamento) {
         return new MetodoPagamentoEntity(
-                metodoPagamento.getCodigo(),
+                metodoPagamento.getId(),
                 metodoPagamento.getNome(),
                 metodoPagamento.getTipoPagamento(),
                 metodoPagamento.getUrlImagem()
@@ -33,6 +33,6 @@ public class MetodoPagamentoMapper {
     }
 
     public MetodoPagamentoResponse toResponse(MetodoPagamento metodoPagamento) {
-        return new MetodoPagamentoResponse(metodoPagamento.getCodigo(), metodoPagamento.getNome(), metodoPagamento.getTipoPagamento(), metodoPagamento.getUrlImagem());
+        return new MetodoPagamentoResponse(metodoPagamento.getId(), metodoPagamento.getNome(), metodoPagamento.getTipoPagamento(), metodoPagamento.getUrlImagem());
     }
 }
