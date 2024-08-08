@@ -1,4 +1,3 @@
-
 name: CI/CD Pipeline
 
 on:
@@ -10,33 +9,142 @@ on:
     branches:
       - main
 
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
+  ECS_SERVICE: ${{ vars.ECS_SERVICE }}
+  ECS_CLUSTER: ${{ vars.ECS_CLUSTER }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  SERVER_PORT: ${{ vars.SERVER_PORT }}
+  SPRING_PROFILE: ${{ vars.SPRING_PROFILE }}
+  LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+  LOG_PATH: ${{ vars.LOG_PATH }}
+  MONGO_USER: ${{ secrets.MONGO_USER }}
+  MONGO_PASS: ${{ secrets.MONGO_PASS }}
+  MONGO_HOST: ${{ secrets.MONGO_HOST }}
+  MONGO_PORT: ${{ secrets.MONGO_PORT }}
+  MONGO_DB: ${{ secrets.MONGO_DB }}
+  RABBITMQ_HOST: ${{ secrets.RABBITMQ_HOST }}
+  RABBITMQ_PORT: ${{ secrets.RABBITMQ_PORT }}
+  RABBITMQ_USER: ${{ secrets.RABBITMQ_USER }}
+  RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+  EXCHANGE_PAGAMENTO: ${{ vars.EXCHANGE_PAGAMENTO }}
+  ROUTEKEY_PAGAMENTO_CRIA: ${{ vars.ROUTEKEY_PAGAMENTO_CRIA }}
+  QUEUES_PAGAMENTO_CRIA: ${{ vars.QUEUES_PAGAMENTO_CRIA }}
+  ROUTEKEY_PAGAMENTO_CRIA_ERRO: ${{ vars.ROUTEKEY_PAGAMENTO_CRIA_ERRO }}
+  QUEUES_PAGAMENTO_CRIA_ERRO: ${{ vars.QUEUES_PAGAMENTO_CRIA_ERRO }}
+  ROUTEKEY_PAGAMENTO_ENVIA: ${{ vars.ROUTEKEY_PAGAMENTO_ENVIA }}
+  QUEUES_PAGAMENTO_ENVIA: ${{ vars.QUEUES_PAGAMENTO_ENVIA }}
+  ROUTEKEY_PAGAMENTO_ENVIA_ERRO: ${{ vars.ROUTEKEY_PAGAMENTO_ENVIA_ERRO }}
+  QUEUES_PAGAMENTO_ENVIA_ERRO: ${{ vars.QUEUES_PAGAMENTO_ENVIA_ERRO }}
+  EXCHANGE_PAGAMENTO_CRIADO: ${{ vars.EXCHANGE_PAGAMENTO_CRIADO }}
+  ROUTEKEY_PAGAMENTO_CRIADO: ${{ vars.ROUTEKEY_PAGAMENTO_CRIADO }}
+  EXCHANGE_PAGAMENTO_AGUARDANDO_PAGAMENTO: ${{ vars.EXCHANGE_PAGAMENTO_AGUARDANDO_PAGAMENTO }}
+  ROUTEKEY_PAGAMENTO_AGUARDANDO_PAGAMENTO: ${{ vars.ROUTEKEY_PAGAMENTO_AGUARDANDO_PAGAMENTO }}
+  EXCHANGE_PAGAMENTO_APROVADO: ${{ vars.EXCHANGE_PAGAMENTO_APROVADO }}
+  ROUTEKEY_PAGAMENTO_APROVADO: ${{ vars.ROUTEKEY_PAGAMENTO_APROVADO }}
+  EXCHANGE_PAGAMENTO_REPROVADO: ${{ vars.EXCHANGE_PAGAMENTO_REPROVADO }}
+  ROUTEKEY_PAGAMENTO_REPROVADO: ${{ vars.ROUTEKEY_PAGAMENTO_REPROVADO }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          distribution: "temurin"
+          java-version: 21
 
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Build with Maven
+        run: mvn package -DskipTests
+        env:
+          AWS_REGION: ${{ env.AWS_REGION }}
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          ECS_SERVICE: ${{ env.ECS_SERVICE }}
+          ECS_CLUSTER: ${{ env.ECS_CLUSTER }}
+          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          LOG_LEVEL: ${{ env.LOG_LEVEL }}
+          LOG_PATH: ${{ env.LOG_PATH }}
+          MONGO_USER: ${{ env.MONGO_USER }}
+          MONGO_PASS: ${{ env.MONGO_PASS }}
+          MONGO_HOST: ${{ env.MONGO_HOST }}
+          MONGO_PORT: ${{ env.MONGO_PORT }}
+          MONGO_DB: ${{ secrets.MONGO_DB }}
+          RABBITMQ_HOST: ${{ env.RABBITMQ_HOST }}
+          RABBITMQ_PORT: ${{ env.RABBITMQ_PORT }}
+          RABBITMQ_USER: ${{ env.RABBITMQ_USER }}
+          RABBITMQ_PASSWORD: ${{ env.RABBITMQ_PASSWORD }}
+          ROUTEKEY_PAGAMENTO_CRIA: ${{ env.ROUTEKEY_PAGAMENTO_CRIA }}
+          QUEUES_PAGAMENTO_CRIA: ${{ env.QUEUES_PAGAMENTO_CRIA }}
+          ROUTEKEY_PAGAMENTO_CRIA_ERRO: ${{ env.ROUTEKEY_PAGAMENTO_CRIA_ERRO }}
+          QUEUES_PAGAMENTO_CRIA_ERRO: ${{ env.QUEUES_PAGAMENTO_CRIA_ERRO }}
+          ROUTEKEY_PAGAMENTO_ENVIA: ${{ env.ROUTEKEY_PAGAMENTO_ENVIA }}
+          QUEUES_PAGAMENTO_ENVIA: ${{ env.QUEUES_PAGAMENTO_ENVIA }}
+          ROUTEKEY_PAGAMENTO_ENVIA_ERRO: ${{ env.ROUTEKEY_PAGAMENTO_ENVIA_ERRO }}
+          QUEUES_PAGAMENTO_ENVIA_ERRO: ${{ env.QUEUES_PAGAMENTO_ENVIA_ERRO }}
+          EXCHANGE_PAGAMENTO_CRIADO: ${{ env.EXCHANGE_PAGAMENTO_CRIADO }}
+          ROUTEKEY_PAGAMENTO_CRIADO: ${{ env.ROUTEKEY_PAGAMENTO_CRIADO }}
+          EXCHANGE_PAGAMENTO_AGUARDANDO_PAGAMENTO: ${{ env.EXCHANGE_PAGAMENTO_AGUARDANDO_PAGAMENTO }}
+          ROUTEKEY_PAGAMENTO_AGUARDANDO_PAGAMENTO: ${{ env.ROUTEKEY_PAGAMENTO_AGUARDANDO_PAGAMENTO }}
+          EXCHANGE_PAGAMENTO_APROVADO: ${{ env.EXCHANGE_PAGAMENTO_APROVADO }}
+          ROUTEKEY_PAGAMENTO_APROVADO: ${{ env.ROUTEKEY_PAGAMENTO_APROVADO }}
+          EXCHANGE_PAGAMENTO_REPROVADO: ${{ env.EXCHANGE_PAGAMENTO_REPROVADO }}
+          ROUTEKEY_PAGAMENTO_REPROVADO: ${{ env.ROUTEKEY_PAGAMENTO_REPROVADO }}
+
+      #      - name: Test with Maven
+      #        run: mvn test
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
+          name: app-artifacts
+          path: target/*.jar
 
-      - name: Build and test
-        run: ./mvnw clean install
+  #      - name: Upload test results
+  #        if: always()
+  #        uses: actions/upload-artifact@v2
+  #        with:
+  #          name: test-results
+  #          path: target/surefire-reports/
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v2
+  deploy:
+    name: Deploy
+    environment: production
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          name: test-results
-          path: target/surefire-reports/
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify AWS credentials
+        run: aws sts get-caller-identity
+
+      - name: Log in to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push Docker image to ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
