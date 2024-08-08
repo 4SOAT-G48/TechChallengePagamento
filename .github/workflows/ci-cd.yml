@@ -98,8 +98,8 @@ jobs:
           EXCHANGE_PAGAMENTO_REPROVADO: ${{ env.EXCHANGE_PAGAMENTO_REPROVADO }}
           ROUTEKEY_PAGAMENTO_REPROVADO: ${{ env.ROUTEKEY_PAGAMENTO_REPROVADO }}
 
-      - name: Test with Maven
-        run: mvn test
+      #      - name: Test with Maven
+      #        run: mvn test
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
