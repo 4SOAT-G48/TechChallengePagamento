@@ -4,7 +4,7 @@
     <groupId>br.com.fiap.soat</groupId>
     <artifactId>TechChallengePagamento</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+
 
     <name>TechChallengePagamento</name>
     <description>Serviço de Pagamento da TechChallenge</description>
